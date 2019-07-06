@@ -107,6 +107,23 @@ spec:
           value: {{ .Values.mon.monOutTimeout }}
 {{- end }}
 {{- end }}
+{{- if .Values.csiEnable }}
+        # CSI enablement - https://github.com/rook/rook/blob/master/cluster/examples/kubernetes/ceph/operator-with-csi.yaml
+        - name: ROOK_CSI_ENABLE_CEPHFS
+          value: "true"
+        - name: ROOK_CSI_CEPH_IMAGE
+          value: "quay.io/cephcsi/cephcsi:canary"
+        - name: ROOK_CSI_ENABLE_RBD
+          value: "true"
+        - name: ROOK_CSI_REGISTRAR_IMAGE
+          value: "quay.io/k8scsi/csi-node-driver-registrar:v1.1.0"
+        - name: ROOK_CSI_PROVISIONER_IMAGE
+          value: "quay.io/k8scsi/csi-provisioner:v1.2.0"
+        - name: ROOK_CSI_SNAPSHOTTER_IMAGE
+          value: "quay.io/k8scsi/csi-snapshotter:v1.1.0"
+        - name: ROOK_CSI_ATTACHER_IMAGE
+          value: "quay.io/k8scsi/csi-attacher:v1.1.1"
+{{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
 {{- if .Values.nodeSelector }}
